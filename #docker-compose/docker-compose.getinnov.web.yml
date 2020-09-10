@@ -1,0 +1,43 @@
+version: '3'
+
+networks:
+  proxy:
+    external:
+        name: docker-compose_proxy
+
+services:
+  landing:
+    image: nginx
+    container_name: landing
+    restart: always
+    volumes:
+      - ../Getinnov/Webapps/getinnov/front:/usr/share/nginx/html:ro
+      - ../Getinnov/Webapps/getinnov/conf/landing.conf:/etc/nginx/conf.d/default.conf:ro
+    links:
+      - error
+      - php
+    networks:
+      - proxy
+    environment:
+      VIRTUAL_HOST: www.${DOMAIN}, ${DOMAIN}
+      VIRTUAL_PORT: 80
+      LETSENCRYPT_HOST: ${DOMAIN}
+      LETSENCRYPT_EMAIL: ${EMAIL}
+
+  php:
+    image: php:fpm-alpine
+    container_name: php
+    volumes:
+      - ../Getinnov/Webapps/getinnov/front:/script:ro
+    networks:
+      - proxy
+
+  error:
+    image: nginx
+    container_name: error
+    restart: always
+    volumes:
+      - ../Getinnov/Webapps/error.getinnov/front:/usr/share/nginx/html:ro
+      - ../Getinnov/Webapps/error.getinnov/conf/error.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - proxy

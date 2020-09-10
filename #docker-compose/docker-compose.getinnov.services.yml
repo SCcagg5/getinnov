@@ -1,0 +1,33 @@
+version: "3"
+networks:
+    proxy:
+      external:
+        name: docker-compose_proxy
+
+services:
+    posteio:
+        image: analogic/poste.io
+        ports:
+            - 0.0.0.0:25:25
+            - 110:110
+            - 143:143
+            - 465:465
+            - 587:587
+            - 993:993
+            - 995:995
+            - 4190:4190
+        expose:
+            - 80
+        volumes:
+            - ../Getinnov/Micro/posteio:/data
+        hostname: mail
+        domainname: ${DOMAIN}
+        environment:
+            TZ: Europe/Prague
+            HTTPS: 'OFF'
+            VIRTUAL_HOST: mail.${DOMAIN}
+            VIRTUAL_PORT: 80
+            LETSENCRYPT_HOST: mail.${DOMAIN}
+            LETSENCRYPT_EMAIL: ${EMAIL}
+        networks:
+            - proxy
