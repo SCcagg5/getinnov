@@ -1,6 +1,9 @@
 .env
 __pycache__
-
+\#docker-compose/.env
+Proxy/logs/global/access.log
+Proxy/logs/global/error.log
+Proxy/vhost/default
 Proxy/conf/default.conf
 Proxy/data
 Proxy/logs
@@ -22,3 +25,4 @@ misc
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+Getinnov/Micro/
